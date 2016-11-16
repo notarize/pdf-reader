@@ -42,7 +42,7 @@ module PDF
         @state = PageState.new(page)
         @content = []
         @characters = []
-        @mediabox = page.objects.deref(page.attributes[:MediaBox])
+        @mediabox = page.attributes[:MediaBox]
       end
 
       def content

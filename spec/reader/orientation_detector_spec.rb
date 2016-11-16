@@ -9,7 +9,7 @@ describe PDF::Reader::OrientationDetector, "#orientation" do
       PDF::Reader::OrientationDetector.new(:MediaBox => [0, 0, 612, 792])
     }
     it "should return portrait" do
-      expect(detector.orientation).to eq('portrait')
+      detector.orientation.should == 'portrait'
     end
   end
 
@@ -18,7 +18,7 @@ describe PDF::Reader::OrientationDetector, "#orientation" do
       PDF::Reader::OrientationDetector.new(:MediaBox => [0, 0, 612, 792], :Rotate => 270)
     }
     it "should return landscape" do
-      expect(detector.orientation).to eq('landscape')
+      detector.orientation.should == 'landscape'
     end
   end
 
@@ -27,7 +27,7 @@ describe PDF::Reader::OrientationDetector, "#orientation" do
       PDF::Reader::OrientationDetector.new(:MediaBox => [0, 0, 792, 612])
     }
     it "should return landscape" do
-      expect(detector.orientation).to eq('landscape')
+      detector.orientation.should == 'landscape'
     end
   end
 
@@ -36,7 +36,7 @@ describe PDF::Reader::OrientationDetector, "#orientation" do
       PDF::Reader::OrientationDetector.new(:MediaBox => [0, 0, 792, 612], :Rotate => 90)
     }
     it "should return portrait" do
-      expect(detector.orientation).to eq('portrait')
+      detector.orientation.should == 'portrait'
     end
   end
 

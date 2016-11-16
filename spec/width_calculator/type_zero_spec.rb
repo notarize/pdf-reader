@@ -17,7 +17,7 @@ describe PDF::Reader::WidthCalculator::TypeZero, "#glyph_width" do
     subject            { PDF::Reader::WidthCalculator::TypeZero.new(font)}
 
     it "should delegate the width calculation to the first descendant font" do
-      expect(subject.glyph_width(10)).to eq(50)
+      subject.glyph_width(10).should == 50
     end
   end
 end

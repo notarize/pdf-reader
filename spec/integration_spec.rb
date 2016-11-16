@@ -17,7 +17,7 @@ describe PDF::Reader, "integration specs" do
 
     PDF::Reader.open(filename) do |reader|
       page = reader.page(1)
-      expect(page.text).to eql("Chunky Bacon")
+      page.text.should eql("Chunky Bacon")
     end
   end
 
@@ -26,7 +26,7 @@ describe PDF::Reader, "integration specs" do
 
     PDF::Reader.open(filename) do |reader|
       page = reader.page(1)
-      expect(page.text.split.map(&:strip)).to eql(%w{V e r t i c a l T e x t})
+      page.text.split.map(&:strip).should eql(%w{V e r t i c a l T e x t})
     end
   end
 
@@ -35,8 +35,8 @@ describe PDF::Reader, "integration specs" do
 
     PDF::Reader.open(filename) do |reader|
       page = reader.page(1)
-      expect(page.text).to include("This is a sample PDF file")
-      expect(page.text).to include("If you can read this, you already have Adobe Acrobat")
+      page.text.should include("This is a sample PDF file")
+      page.text.should include("If you can read this, you already have Adobe Acrobat")
     end
   end
 
@@ -44,12 +44,12 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("dutch")
 
     PDF::Reader.open(filename) do |reader|
-      expect(reader.pages.size).to eql(3)
+      reader.pages.size.should eql(3)
 
       page = reader.page(1)
-      expect(page.text).to include("Dit\302\240is\302\240een\302\240pdf\302\240test\302\240van\302\240drie\302\240pagina")
-      expect(page.text).to include("’s")
-      expect(page.text).to include("Pagina\302\2401")
+      page.text.should include("Dit\302\240is\302\240een\302\240pdf\302\240test\302\240van\302\240drie\302\240pagina")
+      page.text.should include("’s")
+      page.text.should include("Pagina\302\2401")
     end
   end
 
@@ -58,7 +58,7 @@ describe PDF::Reader, "integration specs" do
 
     PDF::Reader.open(filename) do |reader|
       page = reader.page(1)
-      expect(page.text).to eql("Goiás")
+      page.text.should eql("Goiás")
     end
   end
 
@@ -67,7 +67,7 @@ describe PDF::Reader, "integration specs" do
 
     PDF::Reader.open(filename) do |reader|
       page = reader.page(1)
-      expect(page.text).to match(/Tax\s+Invoice/)
+      page.text.should match(/Tax\s+Invoice/)
     end
   end
 
@@ -75,8 +75,8 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("content_stream_missing_final_operator")
 
     PDF::Reader.open(filename) do |reader|
-      expect(reader.page(1).text).to match(/Locatrix/)
-      expect(reader.page(2).text).to match(/Ubuntu/)
+      reader.page(1).text.should match(/Locatrix/)
+      reader.page(2).text.should match(/Ubuntu/)
     end
   end
 
@@ -87,9 +87,9 @@ describe PDF::Reader, "integration specs" do
 
     PDF::Reader.open(filename) do |reader|
       if RUBY_VERSION >= "1.9"
-        expect(reader.page(1).text[0,1]).to eql("’")
+        reader.page(1).text[0,1].should eql("’")
       else
-        expect(reader.page(1).text[0,3]).to eql("’")
+        reader.page(1).text[0,3].should eql("’")
       end
     end
   end
@@ -99,10 +99,10 @@ describe PDF::Reader, "integration specs" do
 
     # this file used to get us into a hard, endless loop. Make sure that doesn't still happen
     Timeout::timeout(3) do
-      expect {
+      lambda {
         reader = PDF::Reader.new(filename)
         reader.info
-      }.to raise_error(PDF::Reader::MalformedPDFError)
+      }.should raise_error(PDF::Reader::MalformedPDFError)
     end
   end
 
@@ -110,7 +110,7 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("content_stream_with_length_as_ref")
 
     PDF::Reader.open(filename) do |reader|
-      expect(reader.page(1).text).to eql("Hello World")
+      reader.page(1).text.should eql("Hello World")
     end
   end
 
@@ -121,30 +121,30 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("content_stream_with_length_as_ref_and_windows_breaks")
 
     PDF::Reader.open(filename) do |reader|
-      expect(reader.page(1).text).to eql("Hello World")
+      reader.page(1).text.should eql("Hello World")
     end
   end
 
   it "should raise an exception if a content stream refers to a non-existant font" do
     filename = pdf_spec_file("content_stream_refers_to_invalid_font")
 
-    expect {
+    lambda {
       reader = PDF::Reader.new(filename)
       reader.page(1).text
-    }.to raise_error(PDF::Reader::MalformedPDFError)
+    }.should raise_error(PDF::Reader::MalformedPDFError)
   end
 
   it "should raise an exception if the file is empty" do
-    expect {
+    lambda {
       PDF::Reader.new(StringIO.new(""))
-    }.to raise_error(PDF::Reader::MalformedPDFError)
+    }.should raise_error(PDF::Reader::MalformedPDFError)
   end
 
   it "should correctly process a PDF that uses an ASCII85Decode filter" do
     filename = pdf_spec_file("ascii85_filter")
 
     PDF::Reader.open(filename) do |reader|
-      expect(reader.page(1).text).to match(/Et Iunia se/)
+      reader.page(1).text.should match(/Et Iunia se/)
     end
   end
 
@@ -152,7 +152,7 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("inline_image_single_line_content_stream")
 
     PDF::Reader.open(filename) do |reader|
-      expect(reader.page(1).text.strip[0,7]).to eql("WORKING")
+      reader.page(1).text.strip[0,7].should eql("WORKING")
     end
   end
 
@@ -160,8 +160,8 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("form_xobject")
 
     PDF::Reader.open(filename) do |reader|
-      expect(reader.page(1).text).to eql("James Healy")
-      expect(reader.page(2).text).to eql("James Healy")
+      reader.page(1).text.should eql("James Healy")
+      reader.page(2).text.should eql("James Healy")
     end
   end
 
@@ -169,10 +169,10 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("form_xobject_more")
 
     PDF::Reader.open(filename) do |reader|
-      expect(reader.page(1).text).to include("Some regular content")
-      expect(reader.page(1).text).to include("James Healy")
-      expect(reader.page(2).text).to include("€10")
-      expect(reader.page(2).text).to include("James Healy")
+      reader.page(1).text.should include("Some regular content")
+      reader.page(1).text.should include("James Healy")
+      reader.page(2).text.should include("€10")
+      reader.page(2).text.should include("James Healy")
     end
   end
 
@@ -180,7 +180,7 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("indirect_xobject")
 
     PDF::Reader.open(filename) do |reader|
-      expect(reader.page(1).text).not_to be_nil
+      reader.page(1).text.should_not be_nil
     end
   end
 
@@ -188,8 +188,8 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("split_params_and_operator")
 
     PDF::Reader.open(filename) do |reader|
-      expect(reader.page(1).text).to include("My name is")
-      expect(reader.page(1).text).to include("James Healy")
+      reader.page(1).text.should include("My name is")
+      reader.page(1).text.should include("James Healy")
     end
   end
 
@@ -197,7 +197,7 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("space_after_eof")
 
     PDF::Reader.open(filename) do |reader|
-      expect(reader.page(1).text).to eql("Hello World")
+      reader.page(1).text.should eql("Hello World")
     end
   end
 
@@ -205,7 +205,7 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("oo3")
 
     PDF::Reader.open(filename) do |reader|
-      expect(reader.page(1).text).to include("test")
+      reader.page(1).text.should include("test")
     end
   end
 
@@ -213,7 +213,7 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("content_stream_begins_with_newline")
 
     PDF::Reader.open(filename) do |reader|
-      expect(reader.page(1).text).to eql("This file has a content stream that begins with \\n\\n")
+      reader.page(1).text.should eql("This file has a content stream that begins with \\n\\n")
     end
   end
 
@@ -221,7 +221,7 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("encrypted_no_user_pass")
 
     PDF::Reader.open(filename) do |reader|
-      expect(reader.page(1).text).to eql("This sample file is encrypted with no user password")
+      reader.page(1).text.should eql("This sample file is encrypted with no user password")
     end
   end
 
@@ -229,7 +229,7 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("encrypted_with_no_user_pass_and_revision_one")
 
     PDF::Reader.open(filename) do |reader|
-      expect(reader.page(1).text).to eql("WOOOOO DOCUMENT!")
+      reader.page(1).text.should eql("WOOOOO DOCUMENT!")
     end
   end
 
@@ -237,9 +237,9 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("encrypted_with_user_pass_apples")
 
     PDF::Reader.open(filename, :password => "apples") do |reader|
-      expect(reader.page(1).text).to match(/^This sample file is encrypted with a user password.$/m)
-      expect(reader.page(1).text).to match(/^User password: apples$/m)
-      expect(reader.page(1).text).to match(/^Owner password: password$/m)
+      reader.page(1).text.should match(/^This sample file is encrypted with a user password.$/m)
+      reader.page(1).text.should match(/^User password: apples$/m)
+      reader.page(1).text.should match(/^Owner password: password$/m)
     end
   end
 
@@ -247,30 +247,20 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("encrypted_with_user_pass_apples")
 
     PDF::Reader.open(filename, :password => "password") do |reader|
-      expect(reader.page(1).text).to match(/^This sample file is encrypted with a user password.$/)
-      expect(reader.page(1).text).to match(/^User password: apples$/m)
-      expect(reader.page(1).text).to match(/^Owner password: password$/m)
+      reader.page(1).text.should match(/^This sample file is encrypted with a user password.$/)
+      reader.page(1).text.should match(/^User password: apples$/m)
+      reader.page(1).text.should match(/^Owner password: password$/m)
     end
   end
 
   it "should raise an exception from an encrypted PDF that requires a user password and none is provided" do
     filename = pdf_spec_file("encrypted_with_user_pass_apples")
 
-    expect {
+    lambda {
       PDF::Reader.open(filename) do |reader|
         reader.page(1).text
       end
-    }.to raise_error(PDF::Reader::EncryptedPDFError)
-  end
-
-  it "should correctly extract text from an encrypted PDF with no user pass or document ID" do
-    filename = pdf_spec_file("encrypted_with_no_doc_id")
-
-    PDF::Reader.open(filename) do |reader|
-      expect(reader.page(1).text).to eql(
-        "This encryped file breaks compatability with the PDF spec because it has no document ID"
-      )
-    end
+    }.should raise_error(PDF::Reader::EncryptedPDFError)
   end
 
   it "should extract inline images correctly" do
@@ -283,26 +273,26 @@ describe PDF::Reader, "integration specs" do
     callbacks = receiver.series(:begin_inline_image, :begin_inline_image_data, :end_inline_image)
 
     # inline images should trigger 3 callbacks. The first with no args.
-    expect(callbacks[0]).to eql(:name => :begin_inline_image, :args => [])
+    callbacks[0].should eql(:name => :begin_inline_image, :args => [])
 
     # the second with the image header (colorspace, etc)
-    expect(callbacks[1]).to eql(:name => :begin_inline_image_data, :args => [:CS, :RGB, :I, true, :W, 234, :H, 70, :BPC, 8])
+    callbacks[1].should eql(:name => :begin_inline_image_data, :args => [:CS, :RGB, :I, true, :W, 234, :H, 70, :BPC, 8])
 
     # the last with the image data
-    expect(callbacks[2][:name]).to eql :end_inline_image
+    callbacks[2][:name].should eql :end_inline_image
     image_data =  callbacks[2][:args].first
 
-    expect(image_data).to be_a(String)
-    expect(image_data.size).to  eql 49140
-    expect(image_data[0,3].unpack("C*")).to   eql [255,255,255]
-    expect(image_data[-3,3].unpack("C*")).to  eql [255,255,255]
+    image_data.should be_a(String)
+    image_data.size.should  eql 49140
+    image_data[0,3].unpack("C*").should   eql [255,255,255]
+    image_data[-3,3].unpack("C*").should  eql [255,255,255]
   end
 
   it "should correctly extract text from a page that has multiple content streams" do
     filename = pdf_spec_file("content_stream_as_array")
 
     PDF::Reader.open(filename) do |reader|
-      expect(reader.page(1).text).to include("Arkansas Declaration Relating")
+      reader.page(1).text.should include("Arkansas Declaration Relating")
     end
   end
 
@@ -311,7 +301,7 @@ describe PDF::Reader, "integration specs" do
 
     PDF::Reader.open(filename) do |reader|
       page = reader.page(1)
-      expect(page.text).to eql("This PDF contains junk before the %-PDF marker")
+      page.text.should eql("This PDF contains junk before the %-PDF marker")
     end
   end
 
@@ -328,7 +318,7 @@ describe PDF::Reader, "integration specs" do
     PDF::Reader.open(filename) do |reader|
       page = reader.page(1)
       m = /raffic/.match(page.text)
-      expect(m[0].to_s).to eql("raffic")
+      m[0].to_s.should eql("raffic")
     end
   end
 
@@ -347,7 +337,7 @@ describe PDF::Reader, "integration specs" do
       page = reader.page(1)
       # 𝑵𝑨𝑺𝑪𝑨𝑹
       utf8_str = [0x1d475, 0x1d468, 0x1d47a, 0x1d46a, 0x1d468, 0x1d479].pack("U*")
-      expect(page.text).to include(utf8_str)
+      page.text.should include(utf8_str)
     end
   end
 
@@ -355,7 +345,7 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("standard_font_with_a_difference")
     PDF::Reader.open(filename) do |reader|
       page = reader.page(1)
-      expect(page.text).to eq("The following word uses a ligature: ﬁve")
+      page.text.should == "The following word uses a ligature: ﬁve"
     end
   end
 
@@ -366,7 +356,7 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("rotated_text")
     PDF::Reader.open(filename) do |reader|
       page = reader.page(1)
-      expect(page.text.split("\n").map(&:strip).slice(0,2)).to eq(["°","9"])
+      page.text.split("\n").map(&:strip).slice(0,2).should == ["°","9"]
     end
   end
 
@@ -374,7 +364,7 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("TJ_starts_with_a_number")
     PDF::Reader.open(filename) do |reader|
       page = reader.page(1)
-      expect(page.text[0,18]).to eq("This file has a TJ")
+      page.text[0,18].should == "This file has a TJ"
     end
   end
 
@@ -382,7 +372,7 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("mediabox_missing")
     PDF::Reader.open(filename) do |reader|
       page = reader.page(1)
-      expect(page.text[0,54]).to eq("This page is missing the compulsory MediaBox attribute")
+      page.text[0,54].should == "This page is missing the compulsory MediaBox attribute"
     end
   end
 
@@ -390,7 +380,7 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("standard_font_with_no_difference")
     PDF::Reader.open(filename) do |reader|
       page = reader.page(1)
-      expect(page.text).to eq("This page uses contains a €")
+      page.text.should == "This page uses contains a €"
     end
   end
 
@@ -398,7 +388,7 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("zapf")
     PDF::Reader.open(filename) do |reader|
       page = reader.page(1)
-      expect(page.text).to include("✄☎✇")
+      page.text.should include("✄☎✇")
     end
   end
 
@@ -406,15 +396,7 @@ describe PDF::Reader, "integration specs" do
     filename = pdf_spec_file("symbol")
     PDF::Reader.open(filename) do |reader|
       page = reader.page(1)
-      expect(page.text).to include("θρ")
-    end
-  end
-
-  it "should correctly extract times text when it has a control char" do
-    filename = pdf_spec_file("times-with-control-character")
-    PDF::Reader.open(filename) do |reader|
-      page = reader.page(1)
-      expect(page.text).to include("This text includes an ASCII control")
+      page.text.should include("θρ")
     end
   end
 end

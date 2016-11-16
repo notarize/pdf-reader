@@ -24,14 +24,14 @@ describe "Spec suite PDFs" do
       item = integrity[relative_path]
 
       # every PDF in the suite MUST be included in the integrity file
-      expect(item).not_to be_nil, "#{path} not found in integrity YAML file"
+      item.should_not be_nil, "#{path} not found in integrity YAML file"
 
       # every PDF in the suite MUST be the correct number of bytes
-      expect(File.size(path)).to eql(item[:bytes])
+      File.size(path).should eql(item[:bytes])
 
       # every PDF in the suite MUST be unchanged
       md5 = Digest::MD5.hexdigest(File.open(path, "rb") { |f|  f.read })
-      expect(md5).to eq(item[:md5])
+      md5.should == item[:md5]
     end
   end
 end

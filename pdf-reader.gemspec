@@ -2,10 +2,9 @@
 # which will make the gem filesize irritatingly large
 Gem::Specification.new do |spec|
   spec.name = "pdf-reader"
-  spec.version = "1.4.0"
+  spec.version = "1.3.3"
   spec.summary = "A library for accessing the content of PDF files"
   spec.description = "The PDF::Reader library implements a PDF parser conforming as much as possible to the PDF specification from Adobe"
-  spec.license = "MIT"
   spec.files =  Dir.glob("{examples,lib}/**/**/*") + ["Rakefile"]
   spec.executables << "pdf_object"
   spec.executables << "pdf_text"
@@ -18,12 +17,12 @@ Gem::Specification.new do |spec|
   spec.authors = ["James Healy"]
   spec.email   = ["jimmy@deefa.com"]
   spec.homepage = "http://github.com/yob/pdf-reader"
-  spec.required_ruby_version = ">=1.9.3"
+  spec.required_ruby_version = ">=1.8.7"
 
   spec.add_development_dependency("rake")
-  spec.add_development_dependency("rspec", "~> 3.4")
-  spec.add_development_dependency("ZenTest", "~> 4.4.2")
-  spec.add_development_dependency("cane", "~> 2.6")
+  spec.add_development_dependency("rspec", "~>2.3")
+  spec.add_development_dependency("ZenTest", "~>4.4.2")
+  spec.add_development_dependency("cane", "~>2.2.3")
   spec.add_development_dependency("morecane")
   spec.add_development_dependency("ir_b")
   spec.add_development_dependency("rdoc")
@@ -32,7 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency('ruby-rc4')
   spec.add_dependency('hashery', '~> 2.0')
   spec.add_dependency('ttfunk')
-  spec.add_dependency('afm', '~> 0.2.1')
+  spec.add_dependency('afm', '~> 0.2.0')
 
   spec.post_install_message = <<END_DESC
 
