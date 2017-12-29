@@ -58,11 +58,11 @@ describe PDF::Reader do
 
   describe  "page_count callback" do
     CallbackHelper.instance.good_receivers.each do |filename, receiver|
-      it "should return a single Fixnum argument that is > 0 on #{filename}" do
+      it "should return a single Integer argument that is > 0 on #{filename}" do
 
         receiver.all_args(:page_count).each do |args|
           assert_equal 1, args.size
-          assert args[0].is_a?(Fixnum)
+          assert args[0].is_a?(Integer)
           (args[0] > 0).should  be_true
         end
 
@@ -239,7 +239,7 @@ describe PDF::Reader do
       it "should return an array of Numbers and UTF-8 strings on #{filename}" do
         receiver.all_args(:show_text_with_positioning).each do |args|
           args[0].each do |arg|
-            assert arg.class == String || arg.class == Fixnum || arg.class == Float
+            assert arg.class == String || arg.class == Integer || arg.class == Float
           end
           check_utf8(args)
         end
