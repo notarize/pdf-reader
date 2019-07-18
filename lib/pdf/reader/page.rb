@@ -63,7 +63,7 @@ module PDF
         }
         # This shouldn't be necesary, but some non compliant PDFs leave MediaBox
         # out. Assuming 8.5" x 11" is what Acobat does, so we do it too.
-        @attributes[:MediaBox] ||= [0,0,612,792]
+        @attributes[:MediaBox] ||= orientation == 'landscape' ? [0,0,792,612] : [0,0,612,792]
         @attributes
       end
 
