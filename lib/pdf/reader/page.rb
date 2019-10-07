@@ -71,6 +71,10 @@ module PDF
       # Convenience method to identify the page's orientation.
       #
       def orientation
+        new_attributes = attributes.clone
+        if new_attributes[:Rotate]
+          new_attributes[:Rotate] = objects.deref(new_attributes[:Rotate])
+        end
         OrientationDetector.new(attributes).orientation
       end
 
